@@ -15,5 +15,5 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-flutter run -> 플러터 시작 명령어
-open -a simulator -> 시뮬레이터 열기
+**flutter run** -> 플러터 시작 명령어 <br/>
+**open -a simulator** -> 시뮬레이터 열기
