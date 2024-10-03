@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'views/login_view.dart'; // 로그인 화면 가져오기
+import 'views/profile_view.dart';  // 마이페이지 임포트
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Runner App',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,7 +33,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      home: const LoginView(), // 로그인 화면을 홈 화면으로 설정합니다.
     );
   }
 }
