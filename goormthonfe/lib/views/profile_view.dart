@@ -1,8 +1,10 @@
+// lib/views/profile_controller.dart
 import 'package:flutter/material.dart';
 import '../controllers/profile_controller.dart';
 import '../models/profile_model.dart';
 import '../models/profile_edit_model.dart';
 import 'profile_edit_view.dart';
+import 'applied_running_view.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -207,10 +209,18 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _buildMyRunningSection() {
     return Column(
       children: [
-        _buildListTile('나의 러닝', onTap: () {
-          // 나의 러닝 클릭 시 로직
+        _buildListTile('신청한 러닝', trailing: const Icon(Icons.arrow_forward_ios), onTap: () {
+          // '신청한 러닝' 클릭 시 applied_running_view로 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AppliedRunningPage(
+                appliedSessions: [],  // 실제 세션 데이터를 전달해야 함
+                createdSessions: [],  // 실제 세션 데이터를 전달해야 함
+              ),
+            ),
+          );
         }),
-        _buildListTile('신청한 러닝', trailing: const Icon(Icons.arrow_forward_ios)),
         _buildListTile('내가 만든 러닝', trailing: const Icon(Icons.arrow_forward_ios)),
         _buildListTile('로그아웃 / 회원탈퇴', onTap: () {
           // 로그아웃/회원탈퇴 로직
