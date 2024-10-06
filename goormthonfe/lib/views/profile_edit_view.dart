@@ -169,6 +169,25 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                   _profileEditController.updateLocation(value);
                 },
               ),
+              const SizedBox(height: 30),
+
+              // 변경하기 버튼 추가
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // 변경 사항을 저장하고 ProfileView로 돌아가기
+                    Navigator.pop(context, _profileEditModel);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50), // 버튼 크기
+                    backgroundColor: const Color(0xFF167DF9), // 버튼 배경색
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // 버튼 모서리 둥글게
+                    ),
+                  ),
+                  child: const Text('변경하기', style: TextStyle(color: Colors.white)),
+                ),
+              ),
             ],
           ),
         ),
