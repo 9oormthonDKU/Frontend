@@ -1,8 +1,8 @@
-// lib/views/login_view.dart
 import 'package:flutter/material.dart';
 import 'sign_up_view.dart';  // 회원가입 화면을 임포트
 import '../controllers/login_controller.dart';
 import '../models/login_model.dart';
+import 'mainscreen_view.dart';  // MainScreen 페이지 임포트 추가
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -98,8 +98,12 @@ class _LoginViewState extends State<LoginView> {
                     ElevatedButton(
                       onPressed: () {
                         if (_loginController.login()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('로그인 성공')),
+                          // 로그인 성공 시 MainScreen으로 이동
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainScreen(),
+                            ),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
