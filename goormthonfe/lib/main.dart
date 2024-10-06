@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:goormthonfe/views/start_view.dart';
 import 'views/login_view.dart'; // 로그인 화면 가져오기
 import 'views/profile_view.dart';  // 마이페이지 임포트
+import 'views/mainscreen_view.dart'; //메인페이지 임포트
 import 'views/applied_running_view.dart'; // 신청한 러닝 페이지 임포트
 import 'controllers/applied_running_controller.dart'; // 신청한 러닝 컨트롤러 임포트
 
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const LoginView(), // 로그인 화면을 홈 화면으로 설정합니다.
+      home:  LoginView(), // 로그인 화면을 홈 화면으로 설정합니다.
     );
   }
 }
