@@ -1,8 +1,8 @@
-// lib/views/applied_running_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../models/applied_running_model.dart';
+import 'mainscreen_view.dart'; // MainScreen 페이지 import
+import 'profile_view.dart'; // ProfileView import 추가
 
 class AppliedRunningPage extends StatelessWidget {
   final List<RunningSession> appliedSessions;
@@ -36,7 +36,7 @@ class AppliedRunningPage extends StatelessWidget {
           _buildRunningSessionsSection("내가 만든 러닝", createdSessions.isEmpty ? _getMockCreatedSessions() : createdSessions),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),  // 하단 내비게이션 바
+      bottomNavigationBar: _buildBottomNavigationBar(context),  // 하단 내비게이션 바
     );
   }
 
@@ -212,7 +212,7 @@ class AppliedRunningPage extends StatelessWidget {
   }
 
   // 하단 내비게이션 바
-  Widget _buildBottomNavigationBar() {
+  Widget _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: Colors.white,  // 배경색을 흰색으로 설정
       items: const <BottomNavigationBarItem>[
@@ -222,6 +222,25 @@ class AppliedRunningPage extends StatelessWidget {
       ],
       currentIndex: 1,  // '나의 러닝' 강조
       selectedItemColor: Colors.blue,
+      onTap: (index) {
+        if (index == 0) {
+          // 홈 버튼을 눌렀을 때 MainScreen 페이지로 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainScreen(), // MainScreen 페이지로 이동
+            ),
+          );
+        } else if (index == 2) {
+          // 마이페이지 버튼을 눌렀을 때 ProfileView 페이지로 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfileView(), // ProfileView 페이지로 이동
+            ),
+          );
+        }
+      },
     );
   }
 }
