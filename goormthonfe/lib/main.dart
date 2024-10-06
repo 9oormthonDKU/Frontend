@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'views/login_view.dart'; // 로그인 화면 가져오기
 import 'views/profile_view.dart';  // 마이페이지 임포트
+import 'views/applied_running_view.dart'; // 신청한 러닝 페이지 임포트
+import 'controllers/applied_running_controller.dart'; // 신청한 러닝 컨트롤러 임포트
 
 void main() {
   runApp(const MyApp());
@@ -123,6 +125,32 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+// 신청한 러닝 페이지 추가 (새로 추가된 부분)
+class MyRunningHome extends StatefulWidget {
+  const MyRunningHome({super.key});
+
+  @override
+  _MyRunningHomeState createState() => _MyRunningHomeState();
+}
+
+class _MyRunningHomeState extends State<MyRunningHome> {
+  late AppliedRunningController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AppliedRunningController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppliedRunningPage(
+      appliedSessions: controller.getAppliedSessions(),
+      createdSessions: controller.getCreatedSessions(),
     );
   }
 }
