@@ -59,7 +59,7 @@ class _StartViewState extends State<StartView> {
                   ),
                   const TextSpan(text: '\n'),
                   TextSpan(
-                    text: '러닝앱',
+                    text: '진런이',
                     style: TextStyle(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
