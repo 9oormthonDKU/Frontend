@@ -41,7 +41,11 @@ class _ProfileEditViewState extends State<ProfileEditView> {
     return Scaffold(
       backgroundColor: Colors.white, // 전체 화면 배경색을 흰색으로 설정
       appBar: AppBar(
-        title: const Text('프로필 설정'),
+        title: const Text('프로필 설정',style: TextStyle(
+          fontWeight: FontWeight.bold, // 글씨를 두껍게 설정
+          color: Colors.black, // 글씨 색상을 검정색으로 설정 (기본값 변경 가능)
+        ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
