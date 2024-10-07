@@ -1,10 +1,12 @@
 // lib/views/profile_controller.dart
+
 import 'package:flutter/material.dart';
 import '../controllers/profile_controller.dart';
 import '../models/profile_model.dart';
 import '../models/profile_edit_model.dart';
 import 'profile_edit_view.dart';
 import 'applied_running_view.dart';
+import 'mainscreen_view.dart';  // MainScreen_view import 추가
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -26,11 +28,37 @@ class _ProfileViewState extends State<ProfileView> {
   );
 
   late ProfileController _profileController;
+  int _selectedIndex = 2;  // 현재 선택된 네비게이션 인덱스, Profile 페이지는 2번째 탭이므로 초기값을 2로 설정
 
   @override
   void initState() {
     super.initState();
     _profileController = ProfileController(_profileModel);
+  }
+
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      // 홈 버튼을 눌렀을 때 MainScreen_view로 이동
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
+    } else if (index == 1) {
+      // 나의 러닝 버튼을 눌렀을 때 applied_running_view로 이동
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AppliedRunningPage(
+            appliedSessions: [],  // 임시 세션 데이터
+            createdSessions: [],  // 임시 세션 데이터
+          ),
+        ),
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;  // 현재 선택된 인덱스를 업데이트 (마이페이지)
+      });
+    }
   }
 
   @override
@@ -67,6 +95,18 @@ class _ProfileViewState extends State<ProfileView> {
             ],
           ),
         ),
+      ),
+      // 하단 네비게이션 바 추가
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+          BottomNavigationBarItem(icon: Icon(Icons.run_circle_outlined), label: '나의러닝'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
+        ],
+        currentIndex: _selectedIndex,  // 현재 선택된 탭 인덱스
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,  // 탭 선택 시 호출되는 함수
       ),
     );
   }
