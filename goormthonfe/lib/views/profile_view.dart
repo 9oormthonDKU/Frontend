@@ -136,25 +136,37 @@ class _ProfileViewState extends State<ProfileView> {
             ],
           ),
         ),
-        ElevatedButton(
-          onPressed: () async {
-            // ProfileModel 데이터를 기반으로 ProfileEditModel 생성
-            final profileEditModel = ProfileEditModel(
-              name: _profileModel.name,
-              gender: _profileModel.gender,
-              birthDate: _profileModel.birthDate,
-              verificationStatus: _profileModel.verificationStatus,
-              goal: _profileModel.goal,  // 현재 목표를 전달
-              location: _profileModel.location,
-            );
-
-            // 프로필 수정 페이지로 이동하고 결과 받기
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProfileEditView(profileEditModel: profileEditModel),
-              ),
-            );
+        // 러닝온도와 수정하기 버튼을 감싸는 Row 추가
+        Row(
+          children: [
+            Column(
+              children: [
+                const Icon(
+                  Icons.water_drop_outlined, // # Icon(Icons.local_drink)
+                  color: Colors.blue, // 아이콘 색상 설정
+                ),
+                const SizedBox(height: 4), // 아이콘과 텍스트 사이의 간격
+                Text(
+                  '러닝온도', // 텍스트 추가
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600], // 텍스트 색상 설정
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 16), // 러닝온도와 수정하기 버튼 사이 간격
+            ElevatedButton(
+              onPressed: () async {
+                // ProfileModel 데이터를 기반으로 ProfileEditModel 생성
+                final profileEditModel = ProfileEditModel(
+                  name: _profileModel.name,
+                  gender: _profileModel.gender,
+                  birthDate: _profileModel.birthDate,
+                  verificationStatus: _profileModel.verificationStatus,
+                  goal: _profileModel.goal, // 현재 목표를 전달
+                  location: _profileModel.location,
+                );
 
                 // 프로필 수정 페이지로 이동하고 결과 받기
                 final result = await Navigator.push(
