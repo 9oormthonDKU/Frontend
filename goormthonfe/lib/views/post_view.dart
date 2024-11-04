@@ -119,7 +119,7 @@ class _PostPageState extends State<PostPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('관심 ${controller.post.interest} 조회 ${controller.post.views} 신고하기'),
+                Text('관심 ${controller.post.interest}'),
                 IconButton(
                   icon: Icon(
                     controller.post.isLiked ? Icons.favorite : Icons.favorite_border,
