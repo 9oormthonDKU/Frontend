@@ -157,7 +157,7 @@ class AppliedRunningPage extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey[200], // 배경색 설정
+                        color: Color(0xFFE9F3FF), // Updated color
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
