@@ -85,26 +85,48 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.black38),
               ),
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    '주 민 등 록 증',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, height: 1.5), // 행간을 넓게 설정
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          '주 민 등 록 증',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, height: 1.5),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          '김단국\n000000-000000',
+                          style: TextStyle(fontSize: 16, height: 1.5),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          '2000.00.00',
+                          style: TextStyle(fontSize: 16, height: 1.5),
+                        ),
+                        Text(
+                          '서울특별시 경찰청장',
+                          style: TextStyle(fontSize: 16, height: 1.5),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    '김단국\n000000-000000',
-                    style: TextStyle(fontSize: 16, height: 1.5), // 행간을 넓게 설정
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    '2000.00.00',
-                    style: TextStyle(fontSize: 16, height: 1.5), // 행간을 넓게 설정
-                  ),
-                  Text(
-                    '서울특별시 경찰청장',
-                    style: TextStyle(fontSize: 16, height: 1.5), // 행간을 넓게 설정
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.grey[200], // Placeholder background color
+                      ),
+                      child: const Icon(Icons.person, size: 50, color: Colors.grey),
+                    ),
                   ),
                 ],
               ),
@@ -118,7 +140,7 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
                 const Expanded(
                   child: Text(
                     '신분증의 앞면이 보이도록 놓아주세요.\n   (어두운 바닥에 놓으면 더 잘 인식됩니다.)',
-                    style: TextStyle(fontSize: 14, height: 1.5), // 행간을 넓게 설정
+                    style: TextStyle(fontSize: 14, height: 2.5), // 행간을 넓게 설정
                   ),
                 ),
               ],
