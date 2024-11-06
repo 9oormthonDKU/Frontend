@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../controllers/create_appointment_controller.dart';
+import 'post_view.dart'; // PostPage import
 
 class CreateAppointmentScreen extends StatefulWidget {
   @override
@@ -8,8 +9,7 @@ class CreateAppointmentScreen extends StatefulWidget {
 }
 
 class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
-  final CreateAppointmentController _controller =
-      CreateAppointmentController();
+  final CreateAppointmentController _controller = CreateAppointmentController();
   bool isLimitedParticipants = false; // 참가자 제한 상태
   int? maxParticipants; // 최대 참가자 수
   DateTime? selectedDate;
@@ -187,18 +187,24 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,  // 파란색 배경
-                    minimumSize: Size(double.infinity, 50),  // 가로로 긴 버튼
+                    backgroundColor: Colors.blue,
+                    minimumSize: Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),  // 테두리 반경 20px
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   onPressed: () {
-                    // 작성 완료 로직
+                    // 작성 완료 후 PostPage로 이동
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PostPage(),
+                      ),
+                    );
                   },
                   child: Text(
                     '작성 완료',
-                    style: TextStyle(color: Colors.white),  // 글자색 흰색
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -217,7 +223,10 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
             : Colors.white,
         side: BorderSide(color: Colors.grey),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.horizontal(
+            left: limited ? Radius.circular(0) : Radius.circular(20),
+            right: limited ? Radius.circular(20) : Radius.circular(0),
+          ),
         ),
       ),
       onPressed: () {
@@ -240,43 +249,15 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
       children: [
         Text("참가 인원: "),
         Expanded(
-          child: ElevatedButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  int? inputValue;
-                  return AlertDialog(
-                    title: Text('참가자 수 입력'),
-                    content: TextField(
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        inputValue = int.tryParse(value);
-                      },
-                      decoration: InputDecoration(
-                        hintText: '인원 입력',
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          if (inputValue != null) {
-                            setState(() {
-                              maxParticipants = inputValue;
-                            });
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: Text('확인'),
-                      ),
-                    ],
-                  );
-                },
-              );
+          child: TextField(
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              maxParticipants = int.tryParse(value);
             },
-            child: Text(maxParticipants == null
-                ? '인원 수 입력'
-                : '$maxParticipants 명'),
+            decoration: InputDecoration(
+              hintText: '인원 입력',
+              border: InputBorder.none,
+            ),
           ),
         ),
       ],
@@ -285,111 +266,47 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
 
   // 하단에서 올라오는 달력과 시간 선택 (시간 추가 및 스크롤 가능)
   void _showDatePicker(BuildContext context) {
-    DateTime selectedDate = DateTime.now();
-    String? selectedTime;
+    DateTime selectedDateTemp = DateTime.now();
+    String? selectedTimeTemp;
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white, // 달력의 배경색 일치
+      backgroundColor: Colors.white,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return Theme(
-              data: ThemeData(
-                colorScheme: ColorScheme.light(
-                  primary: Color(0xFF167DF9), // 선택된 날짜의 색상을 버튼 색상으로 설정
-                ),
-              ),
-              child: Container(
-                height: 600, // 높이 확대
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        Text(
-                          '일정',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 40),
-                      ],
+            return Container(
+              height: 600,
+              child: Column(
+                children: [
+                  CalendarDatePicker(
+                    initialDate: selectedDateTemp,
+                    firstDate: DateTime(2023),
+                    lastDate: DateTime(2025),
+                    onDateChanged: (newDate) {
+                      setState(() {
+                        selectedDateTemp = newDate;
+                      });
+                    },
+                  ),
+                  Text('시간 선택'),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _buildTimeButtons(setState, selectedTimeTemp),
                     ),
-                    SizedBox(height: 8),
-
-                    // 달력
-                    CalendarDatePicker(
-                      initialDate: selectedDate,
-                      firstDate: DateTime(2023),
-                      lastDate: DateTime(2025),
-                      onDateChanged: (newDate) {
-                        setState(() {
-                          selectedDate = newDate;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    Text('시간'),
-                    SizedBox(height: 8),
-
-                    // 시간 선택 버튼 (30분 단위 스크롤 가능)
-                    Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: _buildTimeButtons(setState),
-                        ),
-                      ),
-                    ),
-                    Spacer(),
-
-                    // 초기화와 완료 버튼
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            side: BorderSide(color: Colors.grey),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              selectedDate = DateTime.now();
-                              selectedTime = null;
-                            });
-                          },
-                          child: Text(
-                            '초기화',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            side: BorderSide(color: Colors.grey),
-                          ),
-                          onPressed: () {
-                            _controller.setDate(selectedDate);
-                            if (selectedTime != null) {
-                              _controller.setTimeSlot(selectedTime!);
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            '완료',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedDate = selectedDateTemp;
+                        selectedTime = selectedTimeTemp;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: Text('완료'),
+                  ),
+                ],
               ),
             );
           },
@@ -398,38 +315,28 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
     );
   }
 
-  // 30분 단위 시간 버튼 생성 함수
-  List<Widget> _buildTimeButtons(StateSetter setState) {
-    List<Widget> buttons = [];
-    for (int hour = 0; hour < 24; hour++) {
-      for (int minute = 0; minute < 60; minute += 30) {
-        String time = '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-        buttons.add(
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: selectedTime == time
-                    ? Color(0xFF167DF9)
-                    : Colors.white,
-                side: BorderSide(color: Colors.grey), // 테두리 색상 일치
-              ),
-              onPressed: () {
-                setState(() {
-                  selectedTime = time;
-                });
-              },
-              child: Text(
-                time,
-                style: TextStyle(
-                  color: selectedTime == time ? Colors.white : Colors.grey, // 거리 글씨 색상
-                ),
-              ),
+  List<Widget> _buildTimeButtons(StateSetter setState, String? selectedTimeTemp) {
+    return List.generate(24, (hour) {
+      return List.generate(2, (index) {
+        String time = '${hour.toString().padLeft(2, '0')}:${index == 0 ? '00' : '30'}';
+        return Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                selectedTimeTemp = time;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: selectedTimeTemp == time ? Colors.blue : Colors.white,
+            ),
+            child: Text(
+              time,
+              style: TextStyle(color: selectedTimeTemp == time ? Colors.white : Colors.grey),
             ),
           ),
         );
-      }
-    }
-    return buttons;
+      });
+    }).expand((i) => i).toList();
   }
 }
