@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/mainscreen_model.dart';
 import '../controllers/mainscreen_controller.dart';
+import 'create_appointment_view.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -32,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 Image.asset(
                   'assets/logo.png',
-                  width: 40, // 로고 크기 조절
+                  width: 40,
                   height: 40,
                 ),
                 Spacer(),
@@ -57,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  '용인시 러닝', // 위치 정보
+                  '용인시 러닝',
                   style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                 ),
               ],
@@ -245,13 +246,16 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // '약속 만들기' 버튼 눌렀을 때 동작 추가
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateAppointmentScreen()),
+          );
         },
-        label: Text('약속 만들기', style: TextStyle( color: Colors.white)),
+        label: Text('약속 만들기', style: TextStyle(color: Colors.white)),
         backgroundColor: Color(0xFF167DF9),
         icon: Icon(Icons.add, color: Colors.white),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30), // 더 둥근 모양으로 변경
+          borderRadius: BorderRadius.circular(30),
         ),
       ),
     );
