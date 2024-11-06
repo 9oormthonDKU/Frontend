@@ -64,10 +64,15 @@ class _SignUpViewState extends State<SignUpView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(
+              Center(
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.grey.shade200,
+                  child: Icon(
+                    Icons.person,
+                    size: 50,
+                    color: Colors.grey.shade600,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -233,7 +238,7 @@ class _SignUpViewState extends State<SignUpView> {
                     );
                   }
                 },
-                child: const Text('다음'),
+                child: const Text('다음', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
                   backgroundColor: const Color(0xFF167DF9),

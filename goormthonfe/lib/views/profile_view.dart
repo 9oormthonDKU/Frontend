@@ -115,14 +115,18 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // 프로필 섹션
   Widget _buildProfileSection() {
     return Row(
       children: [
-        const CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.grey,
-        ),
+      CircleAvatar(
+      radius: 30,
+      backgroundColor: Colors.grey[200],  // Colors.grey.shade200 대신 Colors.grey[200] 사용
+      child: Icon(
+        Icons.person,
+        size: 30,
+        color: Colors.grey[600],  // Colors.grey.shade600 대신 Colors.grey[600] 사용
+      ),
+    ),
         const SizedBox(width: 16),
         Expanded(
           child: Column(
@@ -136,25 +140,25 @@ class _ProfileViewState extends State<ProfileView> {
             ],
           ),
         ),
-        // 러닝온도와 수정하기 버튼을 감싸는 Row 추가
         Row(
           children: [
             Column(
               children: [
                 const Icon(
-                  Icons.water_drop_outlined, // # Icon(Icons.local_drink)
-                  color: Colors.blue, // 아이콘 색상 설정
+                  Icons.water_drop_outlined,
+                  color: Colors.blue,
                 ),
-                const SizedBox(height: 4), // 아이콘과 텍스트 사이의 간격
+                const SizedBox(height: 4),
                 Text(
-                  '러닝온도', // 텍스트 추가
+                  '러닝온도',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[600], // 텍스트 색상 설정
+                    color: Colors.grey[600],
                   ),
                 ),
               ],
             ),
+
             const SizedBox(width: 16), // 러닝온도와 수정하기 버튼 사이 간격
             ElevatedButton(
               onPressed: () async {

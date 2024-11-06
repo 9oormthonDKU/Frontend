@@ -41,35 +41,56 @@ class _StartViewState extends State<StartView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 환영 메시지
-            RichText(
-              text: TextSpan(
-                style: DefaultTextStyle.of(context).style.copyWith(fontSize: 18),
-                children: [
-                  TextSpan(
-                    text: '안녕하세요! ',
-                    style: TextStyle(color: Colors.black), // 글씨 색상 검정
+            // 환영 메시지 가운데 정렬
+            Center(
+              child: RichText(
+                textAlign: TextAlign.center, // 텍스트 전체 가운데 정렬
+                text: TextSpan(
+                  style: DefaultTextStyle.of(context).style.copyWith(
+                    fontSize: 18,
+                    decoration: TextDecoration.none, // 밑줄 제거
                   ),
-                  TextSpan(
-                    text: '김단국님.',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, // 글씨 색상 검정
-                    ), // 이름을 굵게 표시
+                  children: [
+                    TextSpan(
+                      text: '안녕하세요! ',
+                      style: TextStyle(color: Colors.black), // 글씨 색상 검정
+                    ),
+                    TextSpan(
+                      text: '김단국님.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // 글씨 색상 검정
+                      ), // 이름을 굵게 표시
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // "진런이에 오신 것을 환영합니다!" 부분을 추가하고 파란색 강조
+            Center(
+              child: RichText(
+                textAlign: TextAlign.center, // 텍스트 전체 가운데 정렬
+                text: TextSpan(
+                  style: DefaultTextStyle.of(context).style.copyWith(
+                    fontSize: 18,
+                    decoration: TextDecoration.none, // 밑줄 제거
                   ),
-                  const TextSpan(text: '\n'),
-                  TextSpan(
-                    text: '진런이',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                    ), // 러닝앱을 파란색으로 강조
-                  ),
-                  TextSpan(
-                    text: '에 오신 것을 환영합니다!',
-                    style: TextStyle(color: Colors.black), // 글씨 색상 검정
-                  ),
-                ],
+                  children: [
+                    TextSpan(
+                      text: '진런이',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ), // 러닝앱을 파란색으로 강조
+                    ),
+                    TextSpan(
+                      text: '에 오신 것을 환영합니다!',
+                      style: TextStyle(color: Colors.black), // 글씨 색상 검정
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -122,6 +143,9 @@ class _StartViewState extends State<StartView> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10), // 모서리 둥글게 설정
+                  ),
                 ),
                 child: const Text('시작하기', style: TextStyle(color: Colors.white)),
               ),
