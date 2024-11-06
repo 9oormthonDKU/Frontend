@@ -3,7 +3,7 @@ import '../controllers/profile_edit_controller.dart';
 import '../models/profile_edit_model.dart';
 
 class ProfileEditView extends StatefulWidget {
-  final ProfileEditModel profileEditModel; // ProfileView에서 전달받은 데이터
+  final ProfileEditModel profileEditModel;
 
   const ProfileEditView({Key? key, required this.profileEditModel}) : super(key: key);
 
@@ -18,7 +18,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   @override
   void initState() {
     super.initState();
-    _profileEditModel = widget.profileEditModel;  // 전달받은 데이터를 초기화
+    _profileEditModel = widget.profileEditModel;
     _profileEditController = ProfileEditController(_profileEditModel);
   }
 
@@ -39,20 +39,19 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // 전체 화면 배경색을 흰색으로 설정
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('프로필 설정',style: TextStyle(
-          fontWeight: FontWeight.bold, // 글씨를 두껍게 설정
-          color: Colors.black, // 글씨 색상을 검정색으로 설정 (기본값 변경 가능)
-        ),
-        ),
+        title: const Text('프로필 설정', style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        )),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context, _profileEditModel); // 수정된 데이터를 반환
+            Navigator.pop(context, _profileEditModel);
           },
         ),
       ),
@@ -62,10 +61,15 @@ class _ProfileEditViewState extends State<ProfileEditView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(
+              Center(
                 child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.grey,
+                  radius: 40,
+                  backgroundColor: Colors.grey[200],
+                  child: Icon(
+                    Icons.person,
+                    size: 60,
+                    color: Colors.grey[600],
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -75,7 +79,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                 controller: TextEditingController(text: _profileEditModel.name),
                 decoration: const InputDecoration(
                   filled: true,
-                  fillColor: Color(0xFFF5F5F5), // 텍스트 입력 필드의 배경색을 회색으로 설정
+                  fillColor: Color(0xFFF5F5F5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide.none,
@@ -119,7 +123,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                 readOnly: true,
                 decoration: const InputDecoration(
                   filled: true,
-                  fillColor: Color(0xFFF5F5F5), // 텍스트 입력 필드의 배경색을 회색으로 설정
+                  fillColor: Color(0xFFF5F5F5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide.none,
@@ -134,7 +138,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                 readOnly: true,
                 decoration: const InputDecoration(
                   filled: true,
-                  fillColor: Color(0xFFF5F5F5), // 텍스트 입력 필드의 배경색을 회색으로 설정
+                  fillColor: Color(0xFFF5F5F5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide.none,
@@ -147,7 +151,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                 controller: TextEditingController(text: _profileEditModel.goal),
                 decoration: const InputDecoration(
                   filled: true,
-                  fillColor: Color(0xFFF5F5F5), // 텍스트 입력 필드의 배경색을 회색으로 설정
+                  fillColor: Color(0xFFF5F5F5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide.none,
@@ -163,7 +167,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                 controller: TextEditingController(text: _profileEditModel.location),
                 decoration: const InputDecoration(
                   filled: true,
-                  fillColor: Color(0xFFF5F5F5), // 텍스트 입력 필드의 배경색을 회색으로 설정
+                  fillColor: Color(0xFFF5F5F5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide.none,
@@ -174,19 +178,16 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                 },
               ),
               const SizedBox(height: 30),
-
-              // 변경하기 버튼 추가
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    // 변경 사항을 저장하고 ProfileView로 돌아가기
                     Navigator.pop(context, _profileEditModel);
                   },
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 50), // 버튼 크기
-                    backgroundColor: const Color(0xFF167DF9), // 버튼 배경색
+                    minimumSize: Size(double.infinity, 50),
+                    backgroundColor: const Color(0xFF167DF9),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10), // 버튼 모서리 둥글게
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: const Text('변경하기', style: TextStyle(color: Colors.white)),
