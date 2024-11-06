@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../models/mainscreen_model.dart';
 import '../controllers/mainscreen_controller.dart';
 import 'create_appointment_view.dart';
+import 'applied_running_view.dart'; // AppliedRunningPage import 추가
+import 'profile_view.dart'; // ProfileView import 추가
+
 
 class MainScreen extends StatefulWidget {
   @override
@@ -9,14 +12,42 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final RunController runController = RunController();
   final PageController _pageController = PageController(viewportFraction: 0.8);
-  late List<bool> isJoinedList;
+  late List<bool> isJoinedList; // 각 카드의 버튼 상태를 저장하는 리스트
+  int _selectedIndex = 0; // 선택된 인덱스를 관리할 변수 추가
 
   @override
   void initState() {
     super.initState();
-    isJoinedList = List<bool>.generate(runController.getRuns().length, (index) => false);
+    isJoinedList = List<bool>.generate(runController.getRuns().length, (index) => false); // 초기 상태 설정
+  }
+
+  void _onItemTapped(int index) {
+    if (index == 1) {
+      // 나의 러닝을 선택했을 때 AppliedRunningPage로 이동
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AppliedRunningPage(
+            appliedSessions: [], // 임시 빈 리스트 전달
+            createdSessions: [], // 임시 빈 리스트 전달
+          ),
+        ),
+      );
+    } else if (index == 2) {
+      // 마이페이지 선택 시 ProfileView로 이동
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileView(), // ProfileView 페이지로 이동
+        ),
+      );
+    } else {
+      // 다른 메뉴를 선택했을 때는 단순히 index 업데이트
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -59,6 +90,7 @@ class _MainScreenState extends State<MainScreen> {
                 SizedBox(height: 8),
                 Text(
                   '용인시 러닝',
+
                   style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                 ),
               ],
@@ -108,6 +140,7 @@ class _MainScreenState extends State<MainScreen> {
                           child: Text(
                             '${run.location}',
                             style: TextStyle(color: Color(0xFF167DF9), fontWeight: FontWeight.bold),
+
                           ),
                         ),
                         Padding(
@@ -119,6 +152,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+
                           child: Text('오늘의 목표: 5km | 오후 6:30', style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
@@ -156,6 +190,7 @@ class _MainScreenState extends State<MainScreen> {
                                   onPressed: () {
                                     setState(() {
                                       isJoinedList[index] = !isJoinedList[index];
+
                                     });
                                   },
                                   child: Text(
@@ -166,6 +201,7 @@ class _MainScreenState extends State<MainScreen> {
                                   ),
                                 ),
                               ),
+
                               SizedBox(height: 16),
                             ],
                           ),
@@ -177,6 +213,7 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
             child: Row(
@@ -190,26 +227,30 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
+
           Expanded(
             child: ListView.builder(
               scrollDirection: Axis.vertical,
+
               itemCount: runController.getPopularRuns().length,
               itemBuilder: (context, index) {
                 Run popularRun = runController.getPopularRuns()[index];
                 return Container(
+
                   width: 353,
                   height: 150,
                   margin: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     color: Color(0xFFF2F2F2),
                     borderRadius: BorderRadius.circular(12),
+
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
+           Container(
                           margin: const EdgeInsets.symmetric(vertical: 4.0),
                           padding: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
@@ -225,6 +266,7 @@ class _MainScreenState extends State<MainScreen> {
                         Text(
                           popularRun.title,
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -243,6 +285,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -257,6 +300,21 @@ class _MainScreenState extends State<MainScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
+      ),
+    );
+  }
+}
+      // 하단 내비게이션 바 추가
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+          BottomNavigationBarItem(icon: Icon(Icons.run_circle_outlined), label: '나의러닝'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
+        ],
+        currentIndex: _selectedIndex, // 현재 선택된 탭 인덱스
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped, // 탭 선택 시 호출되는 함수
       ),
     );
   }

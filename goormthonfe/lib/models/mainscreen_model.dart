@@ -5,3 +5,4 @@ class Run {
 
   Run({required this.title, required this.location, required this.date});
 }
+
