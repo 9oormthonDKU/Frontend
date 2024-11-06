@@ -30,15 +30,6 @@ class _PostPageState extends State<PostPage> {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/dankook_university.png', // assets 폴더 내의 이미지 경로
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            ),
             SizedBox(height: 18),
             // 신청 현황 부분 (텍스트 고정)
             Stack(
