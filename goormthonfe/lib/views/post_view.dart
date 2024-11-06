@@ -99,12 +99,50 @@ class _PostPageState extends State<PostPage> {
             Text(controller.post.content),
             Divider(color: Colors.grey),
             SizedBox(height: 16),
-            Text(
-              '${controller.post.location}\n${controller.post.date}',
-              style: TextStyle(fontSize: 16),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/location.png', // 위치 아이콘
+                  width: 20,
+                  height: 20,
+                ),
+                SizedBox(width: 8), // 아이콘과 텍스트 사이 간격
+                Text(
+                  controller.post.location,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
             ),
             SizedBox(height: 8),
-            Text('${controller.post.distance} | ${controller.post.pace}'),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/time.png', // 시간 아이콘
+                  width: 20,
+                  height: 20,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  controller.post.date,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/shoeimg.png', // 거리 아이콘
+                  width: 20,
+                  height: 20,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  '${controller.post.distance} | ${controller.post.pace}',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
             Divider(color: Colors.grey),
             SizedBox(height: 16),
             Row(
@@ -126,7 +164,17 @@ class _PostPageState extends State<PostPage> {
             ),
             Divider(color: Colors.grey),
             SizedBox(height: 8),
-            Text("김단국"),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/profileimg.png', // 프로필 아이콘
+                  width: 20,
+                  height: 20,
+                ),
+                SizedBox(width: 8),
+                Text("김단국"),
+              ],
+            ),
             Divider(color: Colors.grey),
             Spacer(), // 화면 하단에 버튼을 고정
             SizedBox(
