@@ -13,21 +13,21 @@ class _VoteScreenState extends State<VoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // 배경을 흰색으로 설정
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('나의 러닝'),
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black, // 앱바 텍스트 색상 변경
-        elevation: 0, // 앱바 그림자 제거
+        foregroundColor: Colors.black,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 가로로 2개의 아이템을 배치
-            crossAxisSpacing: 8, // 아이템 간 가로 간격
-            mainAxisSpacing: 8, // 아이템 간 세로 간격
-            childAspectRatio: 1.1, // 세로 길이를 더 늘리기 위해 비율을 낮춤
+            crossAxisCount: 2,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            childAspectRatio: 0.75,
           ),
           itemCount: controller.users.length,
           itemBuilder: (context, index) {
@@ -45,7 +45,7 @@ class _VoteScreenState extends State<VoteScreen> {
               },
               onChange: () {
                 setState(() {
-                  controller.resetVote(index); // 투표 상태 초기화 기능
+                  controller.resetVote(index);
                 });
               },
             );
@@ -62,19 +62,35 @@ class UserVoteCard extends StatelessWidget {
   final VoidCallback onDecline;
   final VoidCallback onChange;
 
-  UserVoteCard({required this.user, required this.onAccept, required this.onDecline, required this.onChange});
+  UserVoteCard({
+    required this.user,
+    required this.onAccept,
+    required this.onDecline,
+    required this.onChange,
+  });
 
   @override
   Widget build(BuildContext context) {
     bool isPending = user.status == 'pending';
-    bool isCompleted = user.status == 'accepted' || user.status == 'declined';
+    bool isAccepted = user.status == 'accepted';
+    bool isDeclined = user.status == 'declined';
+
+    Color cardColor = Colors.white;
+    String statusText = '';
+    if (isAccepted) {
+      cardColor = Color(0xFFE9F3FF); // 수락 완료 배경색
+      statusText = '수락 완료';
+    } else if (isDeclined) {
+      cardColor = Color(0xFFF2F2F2); // 거절 완료 배경색
+      statusText = '거절 완료';
+    }
 
     return Card(
-      color: isPending ? Colors.white : Colors.grey[200], // 상태에 따라 배경색 변경
+      color: cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isPending ? Colors.grey : Colors.transparent, // 상태에 따른 테두리 색상 설정
+          color: isPending ? Colors.grey : Colors.transparent,
           width: 1,
         ),
       ),
@@ -83,20 +99,46 @@ class UserVoteCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${user.name}, ${user.age}', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text('${user.job}', style: TextStyle(color: Colors.grey)),
-            Spacer(), // 남은 공간을 채워 아래 버튼들이 하단에 위치하게 함
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: Colors.grey[300],
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    user.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Icon(Icons.arrow_drop_down, size: 20, color: Colors.grey),
+              ],
+            ),
+            SizedBox(height: 4),
+            Text(
+              '${user.age} ${user.job}',
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+            ),
+            Text(
+              '신원 인증 완료',
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+            ),
+            Spacer(),
             if (isPending) ...[
               ElevatedButton(
                 onPressed: onAccept,
                 child: SizedBox(
                   width: double.infinity,
-                  height: 48, // 버튼 높이 증가
-                  child: Center(child: Text('함께 달리기')),
+                  height: 48,
+                  child: Center(child: Text('함께 달리기', style: TextStyle(fontSize: 14))),
                 ),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xFF167DF9)), // 배경색 #167DF9
-                  foregroundColor: MaterialStateProperty.all(Colors.white), // 글씨 색 흰색
+                  backgroundColor: MaterialStateProperty.all(Color(0xFF167DF9)),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
@@ -107,32 +149,33 @@ class UserVoteCard extends StatelessWidget {
                 onPressed: onDecline,
                 child: SizedBox(
                   width: double.infinity,
-                  height: 48, // 버튼 높이 증가
-                  child: Center(child: Text('거절하기')),
+                  height: 48,
+                  child: Center(child: Text('거절하기', style: TextStyle(fontSize: 14))),
                 ),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xFFF2F2F2)), // 배경색 #F2F2F2
-                  foregroundColor: MaterialStateProperty.all(Color(0xFF787878)), // 글씨 색 #787878
+                  backgroundColor: MaterialStateProperty.all(Color(0xFFF2F2F2)),
+                  foregroundColor: MaterialStateProperty.all(Color(0xFF787878)),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   side: MaterialStateProperty.all(BorderSide(color: Colors.grey)),
                 ),
               ),
-            ] else if (isCompleted) ...[
+            ] else if (isAccepted || isDeclined) ...[
               ElevatedButton(
                 onPressed: null,
                 child: SizedBox(
                   width: double.infinity,
-                  height: 48, // 버튼 높이 증가
-                  child: Center(child: Text(user.status == 'accepted' ? '수락 완료' : '거절 완료')),
+                  height: 48,
+                  child: Center(child: Text(statusText, style: TextStyle(fontSize: 14))),
                 ),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.grey),
+                  backgroundColor: MaterialStateProperty.all(
+                      isAccepted ? Color(0xFFB0C4FF) : Color(0xFFD3D3D3)), // 버튼 색상 맞춤
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  foregroundColor: MaterialStateProperty.all(Colors.white),
                 ),
               ),
               SizedBox(height: 8),
@@ -140,12 +183,12 @@ class UserVoteCard extends StatelessWidget {
                 onPressed: onChange,
                 child: SizedBox(
                   width: double.infinity,
-                  height: 48, // 버튼 높이 동일하게 설정
-                  child: Center(child: Text('변경하기')),
+                  height: 48,
+                  child: Center(child: Text('변경하기', style: TextStyle(fontSize: 14))),
                 ),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white), // 흰색 배경
-                  foregroundColor: MaterialStateProperty.all(Color(0xFF787878)), // 글씨 색 #787878
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  foregroundColor: MaterialStateProperty.all(Color(0xFF787878)),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
