@@ -203,8 +203,8 @@ class AppliedRunningPage extends StatelessWidget {
   List<RunningSession> _getMockCreatedSessions() {
     return [
       RunningSession(
-        time: "오후 6:00",
-        description: "저녁 달리기 같이 하실 분!",
+        time: "오후 8:00",
+        description: "오늘 가볍게 달리실 분!",
         createdBy: User(userId: "3", userName: "박영희"),
         isCreatedByUser: true,
       ),
