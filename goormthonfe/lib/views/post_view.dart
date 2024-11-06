@@ -1,6 +1,6 @@
-// post_view.dart
 import 'package:flutter/material.dart';
 import '../../controllers/post_controller.dart';
+import 'mainscreen_view.dart';
 
 class PostPage extends StatefulWidget {
   @override
@@ -20,6 +20,24 @@ class _PostPageState extends State<PostPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => MainScreen()),
+            );
+          },
+        ),
+        title: Text(
+          "",
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
