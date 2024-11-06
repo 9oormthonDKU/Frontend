@@ -10,10 +10,9 @@ class CreateAppointmentScreen extends StatefulWidget {
 
 class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
   final CreateAppointmentController _controller = CreateAppointmentController();
-  bool isLimitedParticipants = false; // 참가자 제한 상태
-  int? maxParticipants; // 최대 참가자 수
+  bool isLimitedParticipants = false;
+  int? maxParticipants;
   DateTime? selectedDate;
-  String? selectedTime;
   int? selectedDistance;
   int? selectedPace;
 
@@ -47,15 +46,15 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
               _buildTextField('내용을 입력하세요', (value) => _controller.details = value, maxLines: 3),
               Divider(color: Color(0xFFD9D9D9)),
               SizedBox(height: 16),
-              _buildDateSelector(), // 일정 선택을 희망 인원 위로 이동
+              _buildDateSelector(),
               SizedBox(height: 16),
               _buildParticipantSelector(),
               SizedBox(height: 16),
               _buildLocationField(),
               SizedBox(height: 16),
-              _buildDistanceSelector(), // 거리 선택 부분
+              _buildDistanceSelector(),
               SizedBox(height: 16),
-              _buildPaceSelector(), // 페이스 선택 부분
+              _buildPaceSelector(),
               SizedBox(height: 24),
               _buildCompleteButton(),
             ],
@@ -240,9 +239,9 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                selectedDate == null || selectedTime == null
+                selectedDate == null
                     ? '일정을 설정해주세요'
-                    : '${selectedDate!.year}년 ${selectedDate!.month}월 ${selectedDate!.day}일 $selectedTime',
+                    : '${selectedDate!.year}년 ${selectedDate!.month}월 ${selectedDate!.day}일',
                 style: TextStyle(color: Colors.grey),
               ),
               Icon(Icons.arrow_drop_down, color: Colors.grey),
@@ -277,10 +276,10 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
 
   void _showDatePicker(BuildContext context) {
     DateTime tempDate = selectedDate ?? DateTime.now();
-    String? tempTime = selectedTime;
 
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
@@ -293,74 +292,63 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
                   onSurface: Colors.black,
                 ),
               ),
-              child: Container(
-                color: Colors.white,
-                height: 600,
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        Text(
-                          '일정',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 40),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                    CalendarDatePicker(
-                      initialDate: tempDate,
-                      firstDate: DateTime(2023),
-                      lastDate: DateTime(2025),
-                      onDateChanged: (newDate) {
-                        setState(() {
-                          tempDate = newDate;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    Text('시간', style: TextStyle(fontSize: 16)),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: _buildTimeButtons(setState, tempTime),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                          onPressed: () => setState(() {
-                            tempDate = DateTime.now();
-                            tempTime = null;
-                          }),
-                          child: Text('초기화', style: TextStyle(color: Colors.grey)),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            this.setState(() {
-                              selectedDate = tempDate;
-                              selectedTime = tempTime;
-                            });
-                            Navigator.pop(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF167DF9),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () => Navigator.pop(context),
                           ),
-                          child: Text('완료', style: TextStyle(color: Colors.white)),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Text(
+                            '일정',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(width: 40),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      CalendarDatePicker(
+                        initialDate: tempDate,
+                        firstDate: DateTime(2023),
+                        lastDate: DateTime(2025),
+                        onDateChanged: (newDate) {
+                          setState(() {
+                            tempDate = newDate;
+                          });
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () => setState(() {
+                              tempDate = DateTime.now();
+                            }),
+                            child: Text('초기화', style: TextStyle(color: Colors.grey)),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              this.setState(() {
+                                selectedDate = tempDate;
+                              });
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF167DF9),
+                            ),
+                            child: Text('완료', style: TextStyle(color: Colors.white)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -368,28 +356,5 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
         );
       },
     );
-  }
-
-  List<Widget> _buildTimeButtons(StateSetter setState, String? selectedTimeTemp) {
-    return List.generate(24, (hour) {
-      return List.generate(2, (index) {
-        String time = '${hour.toString().padLeft(2, '0')}:${index == 0 ? '00' : '30'}';
-        return Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: ElevatedButton(
-            onPressed: () => setState(() {
-              selectedTimeTemp = time;
-              selectedTime = time;
-            }),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: selectedTimeTemp == time ? Color(0xFF167DF9) : Colors.white,
-              side: BorderSide(color: Colors.grey),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            ),
-            child: Text(time, style: TextStyle(color: selectedTimeTemp == time ? Colors.white : Colors.grey)),
-          ),
-        );
-      });
-    }).expand((i) => i).toList();
   }
 }
