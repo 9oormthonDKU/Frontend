@@ -22,3 +22,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/dankook_university.png
+    - assets/comment.png
+    - assets/location.png
+    - assets/profileimg.png
+    - assets/shoeimg.png
+    - assets/time.png
+    - assets/logo.png
