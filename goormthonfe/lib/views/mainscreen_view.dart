@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../models/mainscreen_model.dart';
 import '../controllers/mainscreen_controller.dart';
+import 'create_appointment_view.dart';
 import 'applied_running_view.dart'; // AppliedRunningPage import 추가
 import 'profile_view.dart'; // ProfileView import 추가
+
 
 class MainScreen extends StatefulWidget {
   @override
@@ -10,7 +12,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final RunController runController = RunController();
+  final PageController _pageController = PageController(viewportFraction: 0.8);
   late List<bool> isJoinedList; // 각 카드의 버튼 상태를 저장하는 리스트
   int _selectedIndex = 0; // 선택된 인덱스를 관리할 변수 추가
 
@@ -55,17 +57,24 @@ class _MainScreenState extends State<MainScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 검색창
+          // 로고와 돋보기 아이콘
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/logo.png',
+                  width: 40,
+                  height: 40,
                 ),
-                labelText: '검색',
-                suffixIcon: Icon(Icons.search),
-              ),
+                Spacer(),
+                IconButton(
+                  icon: Icon(Icons.search, size: 28),
+                  onPressed: () {
+                    // 검색 기능 추가 가능
+                  },
+                ),
+              ],
             ),
           ),
           // 제목과 위치 정보
@@ -80,7 +89,8 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  '용인시 러닝', // 위치 정보 추가
+                  '용인시 러닝',
+
                   style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                 ),
               ],
@@ -88,31 +98,49 @@ class _MainScreenState extends State<MainScreen> {
           ),
           // 위치 기반 러닝 (가로 스크롤)
           Container(
-            height: 378, // 카드 크기 높이 설정
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal, // 가로 스크롤 설정
+            height: 400,
+            child: PageView.builder(
+              controller: _pageController,
               itemCount: runController.getRuns().length,
               itemBuilder: (context, index) {
                 Run run = runController.getRuns()[index];
-                return Container(
-                  width: 280, // 카드 크기 너비 설정
-                  margin: const EdgeInsets.all(8.0),
-                  child: Card(
-                    color: Color(0xFFE9F3FF),
+                return AnimatedBuilder(
+                  animation: _pageController,
+                  builder: (context, child) {
+                    double value = 1.0;
+                    if (_pageController.position.haveDimensions) {
+                      value = _pageController.page! - index;
+                      value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
+                    }
+                    return Center(
+                      child: SizedBox(
+                        height: Curves.easeOut.transform(value) * 370,
+                        width: Curves.easeOut.transform(value) * 300,
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE9F3FF),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Color(0xFF167DF9), width: 1.5),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 위치 정보에 흰색 테두리 추가
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
                           decoration: BoxDecoration(
-                            color: Colors.white, // 배경색 설정
-                            borderRadius: BorderRadius.circular(24), // 테두리 반경
-                            border: Border.all(color: Colors.white, width: 1), // 테두리 설정
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(24),
                           ),
                           child: Text(
-                            '${run.location}', // run.location 사용
+                            '${run.location}',
+                            style: TextStyle(color: Color(0xFF167DF9), fontWeight: FontWeight.bold),
+
                           ),
                         ),
                         Padding(
@@ -124,31 +152,45 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text('오늘의 목표: 5km | 오후 6:30'),
+
+                          child: Text('오늘의 목표: 5km | 오후 6:30', style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text('장소: 단국대학교 죽전캠퍼스 대운동장'),
+                          child: Row(
+                            children: [
+                              Icon(Icons.location_on, color: Colors.grey[600], size: 16),
+                              SizedBox(width: 4),
+                              Text('단국대학교 죽전캠퍼스 대운동장', style: TextStyle(color: Colors.grey[600])),
+                            ],
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text('날짜: 2024년 10월 4일 금요일'),
+                          child: Row(
+                            children: [
+                              Icon(Icons.calendar_today, color: Colors.grey[600], size: 16),
+                              SizedBox(width: 4),
+                              Text('9월 29일 (일) 오후 8:00', style: TextStyle(color: Colors.grey[600])),
+                            ],
+                          ),
                         ),
                         Spacer(),
-                        Center( // 버튼을 중앙 정렬하기 위한 Center 위젯
-                          child: Column( // 버튼과 Spacer를 포함한 Column 추가
+                        Center(
+                          child: Column(
                             children: [
-                              SizedBox(height: 16), // 위쪽 여백 추가
+                              SizedBox(height: 16),
                               SizedBox(
-                                width: 248, // 버튼 크기 고정
+                                width: 248,
                                 height: 46,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: isJoinedList[index] ? Color(0xFFE5E5E5) : Color(0xFF167DF9), // 버튼 색상 변경
+                                    backgroundColor: isJoinedList[index] ? Color(0xFFE5E5E5) : Color(0xFF167DF9),
                                   ),
                                   onPressed: () {
                                     setState(() {
-                                      isJoinedList[index] = !isJoinedList[index]; // 버튼 상태 변경
+                                      isJoinedList[index] = !isJoinedList[index];
+
                                     });
                                   },
                                   child: Text(
@@ -159,7 +201,8 @@ class _MainScreenState extends State<MainScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 16), // 아래쪽 여백 추가
+
+                              SizedBox(height: 16),
                             ],
                           ),
                         ),
@@ -170,7 +213,7 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
           ),
-          // 오늘의 인기 러닝
+
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
             child: Row(
@@ -184,44 +227,46 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
-          // 인기 러닝 카드 (세로 스크롤)
-          Expanded( // Expand 위젯 추가
+
+          Expanded(
             child: ListView.builder(
-              scrollDirection: Axis.vertical, // 세로 스크롤 설정
+              scrollDirection: Axis.vertical,
+
               itemCount: runController.getPopularRuns().length,
               itemBuilder: (context, index) {
                 Run popularRun = runController.getPopularRuns()[index];
                 return Container(
-                  width: 353, // 카드 너비 설정
-                  height: 150, // 카드 높이 설정
+
+                  width: 353,
+                  height: 150,
                   margin: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    color: Color(0xFFF2F2F2), // 배경색 설정
-                    borderRadius: BorderRadius.circular(12), // 테두리 반경
+                    color: Color(0xFFF2F2F2),
+                    borderRadius: BorderRadius.circular(12),
+
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 위치 정보를 흰색 테두리로 추가
-                        Container(
+           Container(
                           margin: const EdgeInsets.symmetric(vertical: 4.0),
                           padding: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
-                            color: Colors.white, // 배경색 설정
-                            borderRadius: BorderRadius.circular(12), // 테두리 반경
-                            border: Border.all(color: Colors.white, width: 1), // 테두리 설정
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             popularRun.location,
-                            style: TextStyle(color: Colors.black), // 글씨 색상
+                            style: TextStyle(color: Colors.black),
                           ),
                         ),
-                        SizedBox(height: 6), // 텍스트와 다른 요소 간의 간격 추가
+                        SizedBox(height: 6),
                         Text(
                           popularRun.title,
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18), // 글씨 크기 18로 변경
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -240,6 +285,25 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateAppointmentScreen()),
+          );
+        },
+        label: Text('약속 만들기', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF167DF9),
+        icon: Icon(Icons.add, color: Colors.white),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+      ),
+    );
+  }
+}
       // 하단 내비게이션 바 추가
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
